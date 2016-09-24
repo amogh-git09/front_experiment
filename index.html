@@ -1,0 +1,102 @@
+<html>
+<head>
+  <script src="jquery-3.1.1.min.js"></script>
+  <script src="jquery-ui.js"></script>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="main_title">
+    <h1>Arkinator</h1>
+  </div>
+
+  <div class="btn-div">
+    <button class="question-button" id="myBtn">Next Question</button>
+  </div>
+
+
+  <script>
+    function makeModal(question, options, modalNum) {
+      var modal = '<div id="myModal' + modalNum + '" class="modal"> \
+        <div class="modal-content">                 \
+          <span class="close">x</span>              \
+          <p>' + question + '</p>                   \
+          <div class="options">                     \
+            <br>                                    \
+            <table>                                 \
+              <tr>                                  \
+                <td><button class="option-btn" id="opt1' + modalNum + '">' + options[0] + '</button></td> \
+                <td><button class="option-btn" id="opt2' + modalNum + '">' + options[1] + '</button></td> \
+              </tr>                                 \
+              <tr>                                  \
+                <td><button class="option-btn" id="opt3' + modalNum + '">' + options[2] + '</button></td> \
+                <td><button class="option-btn" id="opt4' + modalNum + '">' + options[3] + '</button></td> \
+              </tr>                                 \
+            </table>                                \
+          </div>                                    \
+        </div>                                      \
+      </div>'
+      return modal;
+    }
+
+    var questions = [
+      "What is your name?",
+      "What is your age?",
+      "How are you doing?",
+      "How old are you?",
+      "Do you have a girlfriend?",
+      "Where did you grow up?"
+    ];
+    var options = ["Option 1", "Option 2", "Option 3", "Option 4"];
+    var modal = makeModal(questions[0], options, 0);
+    document.body.innerHTML+=modal;
+    modal = document.getElementById('myModal0');
+
+    var span  = document.getElementsByClassName("close")[0];
+    var btn   = document.getElementById('myBtn');
+
+    var currentModal = 0;
+    var opt1 = document.getElementById('opt10');
+    opt1.onclick = function() {
+      answerChosen(1);
+    }
+
+    function answerChosen(option) {
+      loadNextModal()
+    }
+
+    function loadNextModal() {
+      var modal = document.getElementById('myModal' + currentModal);
+      modal.style.animation="modal_animation_out 1.0s forwards";
+
+      if(currentModal >= 1){
+        var ancestorModal = document.getElementById('myModal' + (currentModal-1))
+        document.body.removeChild(ancestorModal);
+        ancestorModal = modal;
+      }
+
+      currentModal++;
+      var nextModal = makeModal(questions[currentModal], options, currentModal);
+      document.body.innerHTML += nextModal
+      modal = document.getElementById('myModal' + currentModal);
+      modal.style.display = "block";
+
+      opt1 = document.getElementById('opt1' + currentModal);
+      opt1.onclick = function() {
+        answerChosen(1);
+      }
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+      btn.style.visibility = "initial";
+    }
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+      btn.style.visibility = "hidden";
+    }
+
+  </script>
+
+</body>
+</html>
